@@ -1,0 +1,5 @@
+fastapi
+scikit-learn
+numpy
+uvicorn==0.28.0
+requests==2.27.1
