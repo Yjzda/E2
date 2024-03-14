@@ -14,7 +14,7 @@ async def index_documents(documents: DocumentList):
     return {"message": "Documents indexed successfully."}
 
 @app.get("/query-document")
-async def query_document(query: str, n: int = 5,threshold=0.2):
+async def query_document(query: str, n: int = 5,threshold:float=0.5):
     if indexer.document_matrix is None:
         raise HTTPException(status_code=404, detail="No indexed documents found.")
     results = indexer.query_documents(query, n,threshold)
