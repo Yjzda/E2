@@ -1,7 +1,7 @@
 from fastapi import FastAPI, HTTPException
 from pydantic import BaseModel
 from typing import List
-from indexer_dcv import indexer  # Update import statement
+from indexer_wtv import indexer  # Mise à jour de l'import
 
 app = FastAPI()
 
@@ -14,10 +14,10 @@ async def index_documents(documents: DocumentList):
     return {"message": "Documents indexed successfully."}
 
 @app.get("/query-document")
-async def query_document(query: str, n: int = 5, threshold: float = 0.1):
-    if indexer.doc2vec_model is None:  # Update this check if necessary
+async def query_document(query: str, n: int = 5):
+    if not indexer.word2vec_model.wv.key_to_index:  # Vérifier si le modèle est bien entraîné
         raise HTTPException(status_code=404, detail="No indexed documents found.")
-    results = indexer.query_documents(query, n, threshold)
+    results = indexer.query_documents(query, n)
     return {"query": query, "results": results}
 
 @app.get("/retrieve-document/{index}")
