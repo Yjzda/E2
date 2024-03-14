@@ -8,9 +8,13 @@ class DocumentIndexer:
         self.document_matrix = None
         self.documents = []
 
-    def index(self, documents):
-        self.documents = documents
-        self.document_matrix = self.tfidf_vectorizer.fit_transform(documents)
+    def index(self, new_documents):
+        if not hasattr(self, 'documents') or self.documents is None:
+            self.documents = new_documents
+        else:
+            
+            self.documents.extend(new_documents)
+        self.document_matrix = self.tfidf_vectorizer.fit_transform(self.documents)
 
     def query_documents(self, query, n=5):
         query_vec = self.tfidf_vectorizer.transform([query])
