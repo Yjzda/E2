@@ -7,7 +7,7 @@ client = TestClient(app)
 
 documents = {
     "documents": [
-        "the cat is blue. It's from Egypt.",
+        "The cat is blue. It's from Egypt.",
         "The hat is red."
     ]
 }
@@ -37,5 +37,5 @@ def test_query_where_cat_from():
 def test_retrieve_document():
     response = client.get("/retrieve-document/0")
     assert response.status_code == 200
-    assert response.json()["document"] == "the cat is blue. It's from Egypt."
+    assert response.json()["document"] == "The cat is blue. It's from Egypt."
 
