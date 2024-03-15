@@ -1,6 +1,11 @@
 from gensim.models import Word2Vec
 import numpy as np
-
+def cosine_similarity(vec1, vec2):
+    dot_product = np.dot(vec1, vec2.T)
+    norm_vec1 = np.linalg.norm(vec1)
+    norm_vec2 = np.linalg.norm(vec2)
+    similarity = dot_product / (norm_vec1 * norm_vec2)
+    return similarity
 class DocumentIndexer:
     def __init__(self):
         self.word2vec_model = Word2Vec(vector_size=300, window=5, min_count=1, workers=4)
@@ -13,7 +18,7 @@ class DocumentIndexer:
         self.documents.extend(new_documents)
 
     def query_documents(self, query, n=5):
-    # Split the query into individual words
+        # Split the query into individual words
         query_words = query.split()
 
         # Filter out words that are not present in the vocabulary
@@ -24,15 +29,21 @@ class DocumentIndexer:
             # If none of the words in the query are present in the vocabulary, return an empty list
             return []
 
-        # Compute the average vector for the words in the query that are present in the vocabulary
+        # Compute the average word embedding vector for the query
         query_vector = np.mean([self.word2vec_model.wv[word] for word in query_words_in_vocab], axis=0)
 
-        # Find the most similar words to the query vector
-        similar_words = self.word2vec_model.wv.most_similar(positive=[query_vector], topn=n)
+        # Compute the average word embedding vectors for all documents
+        document_vectors = np.array([np.mean([self.word2vec_model.wv[word] for word in doc.split() if word in self.word2vec_model.wv], axis=0)
+                                    for doc in self.documents])
 
-        # Return the most similar words along with their similarity scores
-        return [(self.documents[int(index)], sim) for index, sim in similar_words]
+        # Calculate cosine similarities between the query vector and document vectors
+        cosine_similarities = cosine_similarity(query_vector, document_vectors).flatten()
 
+        # Get indices of documents sorted by similarity
+        related_docs_indices = cosine_similarities.argsort()[:-n-1:-1]
+
+        # Return the most similar documents along with their similarity scores
+        return [(self.documents[i], cosine_similarities[i]) for i in related_docs_indices]
     def retrieve_document(self, index):
         if 0 <= index < len(self.documents):
             return self.documents[index]
@@ -40,4 +51,4 @@ class DocumentIndexer:
             return None
 
 # Global indexer instance
-indexer = DocumentIndexer()
+indexer_wtv = DocumentIndexer()

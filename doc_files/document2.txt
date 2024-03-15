@@ -1,2 +1,1 @@
-This is the content of document 2.
-It can contain multiple lines of text.
+I want to eat a hotdog, but Sam prefers noodles.

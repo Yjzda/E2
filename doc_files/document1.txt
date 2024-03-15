@@ -1,3 +1,2 @@
-This is the content of document 1.
-It can contain multiple lines of text.
+The sun is a planet so does a moon.
 

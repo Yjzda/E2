@@ -16,7 +16,7 @@ class DocumentIndexer:
             self.documents.extend(new_documents)
         self.document_matrix = self.tfidf_vectorizer.fit_transform(self.documents)
 
-    def query_documents(self, query, n=5, threshold: float = 0.5):
+    def query_documents(self, query, n=5, threshold: float = 0.2):
         query_vec = self.tfidf_vectorizer.transform([query])
         cosine_similarities = linear_kernel(query_vec, self.document_matrix).flatten()
         

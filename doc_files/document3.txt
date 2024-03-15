@@ -1,2 +1,1 @@
-This is the content of document 3.
-It can contain multiple lines of text.
+The sea is blue. The sand is confortable. Everyone is enjoying on the beach.
