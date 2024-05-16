@@ -18,31 +18,30 @@ class DocumentIndexer:
         self.documents.extend(new_documents)
 
     def query_documents(self, query, n=5):
-        # Split the query into individual words
+       
         query_words = query.split()
-
-        # Filter out words that are not present in the vocabulary
+ 
         query_words_in_vocab = [word for word in query_words if word in self.word2vec_model.wv]
 
-        # Check if there are any words in the query that are present in the vocabulary
+        
         if not query_words_in_vocab:
             # If none of the words in the query are present in the vocabulary, return an empty list
             return []
 
-        # Compute the average word embedding vector for the query
+        
         query_vector = np.mean([self.word2vec_model.wv[word] for word in query_words_in_vocab], axis=0)
 
-        # Compute the average word embedding vectors for all documents
+       
         document_vectors = np.array([np.mean([self.word2vec_model.wv[word] for word in doc.split() if word in self.word2vec_model.wv], axis=0)
                                     for doc in self.documents])
 
-        # Calculate cosine similarities between the query vector and document vectors
+        
         cosine_similarities = cosine_similarity(query_vector, document_vectors).flatten()
 
-        # Get indices of documents sorted by similarity
+        
         related_docs_indices = cosine_similarities.argsort()[:-n-1:-1]
 
-        # Return the most similar documents along with their similarity scores
+       
         return [(self.documents[i], cosine_similarities[i]) for i in related_docs_indices]
     def retrieve_document(self, index):
         if 0 <= index < len(self.documents):
@@ -50,5 +49,5 @@ class DocumentIndexer:
         else:
             return None
 
-# Global indexer instance
+
 indexer_wtv = DocumentIndexer()
