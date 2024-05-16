@@ -4,11 +4,11 @@ from sklearn.model_selection import GridSearchCV
 from sklearn.metrics import make_scorer
 from sklearn.metrics.pairwise import cosine_similarity
 
-# Define custom scoring function
+
 def cosine_similarity_score(y_true, y_pred):
     return cosine_similarity(y_true.reshape(1, -1), y_pred.reshape(1, -1))[0][0]
 
-# Make scorer from custom scoring function
+
 cosine_similarity_scorer = make_scorer(cosine_similarity_score)
 
 class DocumentIndexer:
@@ -40,7 +40,7 @@ class DocumentIndexer:
         else:
             return None
 
-# Sample documents
+
 documents = [
     "This is the first document.",
     "This document is the second document.",
@@ -48,7 +48,7 @@ documents = [
     "Is this the first document?",
 ]
 
-# Grid of hyperparameters for fine-tuning
+
 param_grid = {
     'max_features': [1000, 2000, 3000],
     'ngram_range': [(1, 1), (1, 2), (2, 2)],
